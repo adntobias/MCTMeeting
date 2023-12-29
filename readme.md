@@ -8,7 +8,7 @@ Die "Disable User" Card-Action Endpoint verweist auf eine Logic App mit HTTP-Tri
 
 ## Post-Incident Card 
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fStyx665%2fMCTMeeting%2fmain%2fLogic%2520Apps%2fSentinelPostCard.json%3ftoken%3dGHSAT0AAAAAACMEW5SCZ76SD5JJ54HLIKUIZMOWXFQ)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fStyx665%2fMCTMeeting%2fmain%2fLogic%2520Apps%2fSentinelPostCard.json)
 
 Das Ziel ist es, den Incident in Teams darzustellen und direkt eine Aktion auszuführen.
 
@@ -60,8 +60,17 @@ Die Aktion können wir selbst definieren und abfragen. Auf den zurückgegebenen 
 }
 ```
 
+## Post Powershell Card
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FStyx665%2FMCTMeeting%2Fmain%2FLogic%2520Apps%2FCardResponse.json)
+
+- script verlinken
+- card anpassung
+- actions müssen anders entgegengenommen werden
+- 
+
+![Action Response PwrShll](imgs/pwrshllResponse.png)
+
 #### TODO 
 - Deployment errors, due to identity
-- add images
 - ARM Skript parameters
-- Deploy To Azure BTN
