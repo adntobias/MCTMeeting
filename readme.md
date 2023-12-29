@@ -71,7 +71,7 @@ Die Aktion können wir selbst definieren und abfragen. Auf den zurückgegebenen 
 
 ![Action Response PwrShll](imgs/pwrshllResponse.png)
 
-## Card Designer
+## [Card Designer](https://adaptivecards.io/designer/)
 
 :red_circle: Verfügbare Elemente
 
