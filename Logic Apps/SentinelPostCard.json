@@ -1,0 +1,618 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "flowName": {
+      "defaultValue": "postCardToTeamsOnIncident",
+      "type": "String"
+    },
+    "region": {
+      "defaultValue": "[resourceGroup().location]",
+      "type": "string"
+    },
+    "subscription": {
+      "defaultValue": "6d7af662-ea8f-4815-bab6-ba0e8bcdc49d",
+      "type": "string"
+    },
+    "sentinelConnectionName": {
+      "defaultValue": "azuresentinel",
+      "type": "string"
+    }
+  },
+  "variables": {
+    "sentinelString": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/', parameters('sentinelConnectionName'))]",
+    "sentinelId": "[concat('/subscriptions/', parameters('subscription'), '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', parameters('sentinelConnectionName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/connections",
+      "apiVersion": "2016-06-01",
+      "name": "[parameters('sentinelConnectionName')]",
+      "location": "[parameters('region')]",
+      "kind": "V1",
+      "properties": {
+        "displayName": "incidentTrigger",
+        "statuses": [
+          {
+            "status": "Ready"
+          }
+        ],
+        "customParameterValues": {},
+        "createdTime": "2023-12-21T10:47:04.5659388Z",
+        "changedTime": "2023-12-21T10:47:04.5659388Z",
+        "api": {
+          "name": "[parameters('sentinelConnectionName')]",
+          "displayName": "Microsoft Sentinel",
+          "description": "Cloud-native SIEM with a built-in AI so you can focus on what matters most",
+          "iconUri": "[concat('https://connectoricons-prod.azureedge.net/releases/v1.0.1672/1.0.1672.3545/', parameters('sentinelConnectionName'), '/icon.png')]",
+          "brandColor": "#0072C6",
+          "id": "[variables('sentinelId')]",
+          "type": "Microsoft.Web/locations/managedApis"
+        },
+        "testLinks": []
+      }
+    },
+    {
+      "type": "Microsoft.Logic/workflows",
+      "apiVersion": "2017-07-01",
+      "name": "[parameters('flowName')]",
+      "location": "[parameters('region')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/connections', parameters('sentinelConnectionName'))]"
+      ],
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "state": "Enabled",
+        "definition": {
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {
+            "$connections": {
+              "defaultValue": {},
+              "type": "Object"
+            }
+          },
+          "triggers": {
+            "Microsoft_Sentinel_incident": {
+              "type": "ApiConnectionWebhook",
+              "inputs": {
+                "body": {
+                  "callback_url": "@{listCallbackUrl()}"
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                  }
+                },
+                "path": "/incident-creation"
+              }
+            }
+          },
+          "actions": {
+            "Card": {
+              "runAfter": {
+                "loopEntities": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": {
+                "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                "body": [
+                  {
+                    "size": "Large",
+                    "text": "MS Sentinel Incident",
+                    "type": "TextBlock",
+                    "weight": "Bolder",
+                    "wrap": true
+                  },
+                  {
+                    "columns": [
+                      {
+                        "items": [
+                          {
+                            "size": "Small",
+                            "type": "Image",
+                            "url": "https://i.pinimg.com/originals/aa/2d/20/aa2d20591812177bb3a809f2e041d79c.png"
+                          }
+                        ],
+                        "type": "Column",
+                        "width": "auto"
+                      },
+                      {
+                        "items": [
+                          {
+                            "text": "[Go To Incident](@{triggerBody()?['object']?['properties']?['incidentUrl']})",
+                            "type": "TextBlock",
+                            "wrap": true
+                          }
+                        ],
+                        "type": "Column",
+                        "width": "stretch"
+                      }
+                    ],
+                    "type": "ColumnSet"
+                  },
+                  {
+                    "facts": [
+                      {
+                        "title": "Title",
+                        "value": "@{triggerBody()?['object']?['properties']?['title']}"
+                      },
+                      {
+                        "title": "User Recipient",
+                        "value": "@{variables('recipient')}"
+                      },
+                      {
+                        "title": "User Sender",
+                        "value": "@{variables('sender')}"
+                      },
+                      {
+                        "title": "ID",
+                        "value": "1"
+                      },
+                      {
+                        "title": "Incident Time",
+                        "value": "@{triggerBody()?['object']?['properties']?['createdTimeUtc']}"
+                      },
+                      {
+                        "title": "Severity",
+                        "value": "@{triggerBody()?['object']?['properties']?['severity']}"
+                      },
+                      {
+                        "title": "Tactics",
+                        "value": "@{triggerBody()?['object']?['properties']?['additionalData']?['tactics']}"
+                      },
+                      {
+                        "title": "Description",
+                        "value": "@{triggerBody()?['object']?['properties']?['description']}"
+                      }
+                    ],
+                    "type": "FactSet"
+                  },
+                  {
+                    "separator": true,
+                    "size": "Large",
+                    "text": "Actions:",
+                    "type": "TextBlock",
+                    "weight": "Bolder",
+                    "wrap": true
+                  },
+                  {
+                    "actions": [
+                      {
+                        "title": "Disable User",
+                        "type": "Action.Submit"
+                      },
+                      {
+                        "title": "Close Incident",
+                        "type": "Action.Submit"
+                      }
+                    ],
+                    "type": "ActionSet"
+                  }
+                ],
+                "type": "AdaptiveCard",
+                "version": "1.4"
+              }
+            },
+            "Get_incident": {
+              "runAfter": {},
+              "type": "ApiConnection",
+              "inputs": {
+                "body": {
+                  "incidentArmId": "@triggerBody()?['object']?['id']"
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/Incidents"
+              }
+            },
+            "checkSeverity": {
+              "actions": {
+                "PostMsgToTeams": {
+                  "runAfter": {},
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "body": {
+                      "messageBody": "<p>Fear minions, thu have seen the mighty power of incidents:<br>\nbody: @{triggerBody()}<br>\nprops: @{triggerBody()?['object']?['properties']}<br>\nTitle: @{triggerBody()?['object']?['properties']?['title']}<br>\nID: @{triggerBody()?['object']?['properties']?['incidentNumber']}<br>\nCreated At: @{triggerBody()?['object']?['properties']?['createdTimeUtc']}<br>\nDescription: @{triggerBody()?['object']?['properties']?['description']}</p>",
+                      "recipient": {
+                        "channelId": "19:czYuyhGZPF0cs5ORkwciqGxaj1drb8c_21Do9IjcvwY1@thread.tacv2",
+                        "groupId": "1e08ef97-f710-462b-9a69-0f353d355e37"
+                      }
+                    },
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['teams']['connectionId']"
+                      }
+                    },
+                    "method": "post",
+                    "path": "/beta/teams/conversation/message/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
+                  }
+                }
+              },
+              "runAfter": {
+                "Card": [
+                  "Succeeded"
+                ]
+              },
+              "else": {
+                "actions": {
+                  "Post_card_in_a_chat_or_channel": {
+                    "runAfter": {
+                      "postAndWait": [
+                        "Failed"
+                      ]
+                    },
+                    "type": "ApiConnection",
+                    "inputs": {
+                      "body": {
+                        "messageBody": "@{outputs('Card')}",
+                        "recipient": {
+                          "channelId": "19:48436e79b0694e06aace2b46ddf10131@thread.tacv2",
+                          "groupId": "1e08ef97-f710-462b-9a69-0f353d355e37"
+                        }
+                      },
+                      "host": {
+                        "connection": {
+                          "name": "@parameters('$connections')['teams']['connectionId']"
+                        }
+                      },
+                      "method": "post",
+                      "path": "/v1.0/teams/conversation/adaptivecard/poster/@{encodeURIComponent('User')}/location/@{encodeURIComponent('Channel')}"
+                    },
+                    "description": "Post as User for private Channel"
+                  },
+                  "checkResponse": {
+                    "actions": {
+                      "Update_incident": {
+                        "runAfter": {},
+                        "type": "ApiConnection",
+                        "inputs": {
+                          "body": {
+                            "classification": {
+                              "ClassificationAndReason": "Undetermined",
+                              "ClassificationReasonText": "User Closed via Teams"
+                            },
+                            "incidentArmId": "@body('Get_incident')?['id']",
+                            "status": "Closed"
+                          },
+                          "host": {
+                            "connection": {
+                              "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                            }
+                          },
+                          "method": "put",
+                          "path": "/Incidents"
+                        }
+                      }
+                    },
+                    "runAfter": {
+                      "postAndWait": [
+                        "Succeeded"
+                      ]
+                    },
+                    "expression": {
+                      "and": [
+                        {
+                          "equals": [
+                            "@body('postAndWait')?['submitActionId']",
+                            "Close Incident"
+                          ]
+                        }
+                      ]
+                    },
+                    "type": "If"
+                  },
+                  "postAndWait": {
+                    "runAfter": {},
+                    "type": "ApiConnectionWebhook",
+                    "inputs": {
+                      "body": {
+                        "body": {
+                          "messageBody": "@{outputs('Card')}",
+                          "recipient": {
+                            "channelId": "19:czYuyhGZPF0cs5ORkwciqGxaj1drb8c_21Do9IjcvwY1@thread.tacv2",
+                            "groupId": "1e08ef97-f710-462b-9a69-0f353d355e37"
+                          },
+                          "updateMessage": "Thanks for your response!"
+                        },
+                        "notificationUrl": "@{listCallbackUrl()}"
+                      },
+                      "host": {
+                        "connection": {
+                          "name": "@parameters('$connections')['teams']['connectionId']"
+                        }
+                      },
+                      "path": "/v1.0/teams/conversation/gatherinput/poster/Flow bot/location/@{encodeURIComponent('Channel')}/$subscriptions"
+                    }
+                  }
+                }
+              },
+              "expression": {
+                "and": [
+                  {
+                    "not": {
+                      "equals": [
+                        "@triggerBody()?['object']?['properties']?['severity']",
+                        "High"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "type": "If"
+            },
+            "loopEntities": {
+              "foreach": "@triggerBody()?['object']?['properties']?['relatedEntities']",
+              "actions": {
+                "checkKind": {
+                  "actions": {
+                    "EntMailProps": {
+                      "runAfter": {},
+                      "type": "ParseJson",
+                      "inputs": {
+                        "content": "@body('parseEntity')?['properties']",
+                        "schema": {
+                          "properties": {
+                            "antispamDirection": {
+                              "type": "string"
+                            },
+                            "deliveryAction": {
+                              "type": "string"
+                            },
+                            "fileEntityIds": {
+                              "type": "array"
+                            },
+                            "friendlyName": {
+                              "type": "string"
+                            },
+                            "internetMessageId": {
+                              "type": "string"
+                            },
+                            "networkMessageId": {
+                              "type": "string"
+                            },
+                            "p1Sender": {
+                              "type": "string"
+                            },
+                            "p1SenderDisplayName": {
+                              "type": "string"
+                            },
+                            "p1SenderDomain": {
+                              "type": "string"
+                            },
+                            "p2Sender": {
+                              "type": "string"
+                            },
+                            "p2SenderDisplayName": {
+                              "type": "string"
+                            },
+                            "p2SenderDomain": {
+                              "type": "string"
+                            },
+                            "recipient": {
+                              "type": "string"
+                            },
+                            "subject": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "setRecipient": {
+                      "runAfter": {
+                        "EntMailProps": [
+                          "Succeeded"
+                        ]
+                      },
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "recipient",
+                        "value": "@body('EntMailProps')?['recipient']"
+                      }
+                    },
+                    "setSender": {
+                      "runAfter": {
+                        "setRecipient": [
+                          "Succeeded"
+                        ]
+                      },
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "sender",
+                        "value": "@body('parseEntity')?['properties']?['p1Sender']"
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "parseEntity": [
+                      "Succeeded"
+                    ]
+                  },
+                  "expression": {
+                    "and": [
+                      {
+                        "equals": [
+                          "",
+                          "MailMessage"
+                        ]
+                      }
+                    ]
+                  },
+                  "type": "If"
+                },
+                "parseEntity": {
+                  "runAfter": {},
+                  "type": "ParseJson",
+                  "inputs": {
+                    "content": "@items('loopEntities')",
+                    "schema": {
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "kind": {
+                          "type": "string"
+                        },
+                        "properties": {
+                          "properties": {
+                            "aadUserId": {
+                              "type": "string"
+                            },
+                            "accountName": {
+                              "type": "string"
+                            },
+                            "additionalData": {
+                              "properties": {
+                                "AccountName": {
+                                  "type": "string"
+                                },
+                                "UserPrincipalName": {
+                                  "type": "string"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "antispamDirection": {
+                              "type": "string"
+                            },
+                            "deliveryAction": {
+                              "type": "string"
+                            },
+                            "displayName": {
+                              "type": "string"
+                            },
+                            "fileEntityIds": {
+                              "type": "array"
+                            },
+                            "friendlyName": {
+                              "type": "string"
+                            },
+                            "internetMessageId": {
+                              "type": "string"
+                            },
+                            "isDomainJoined": {
+                              "type": "boolean"
+                            },
+                            "mailboxPrimaryAddress": {
+                              "type": "string"
+                            },
+                            "networkMessageId": {
+                              "type": "string"
+                            },
+                            "p1Sender": {
+                              "type": "string"
+                            },
+                            "p1SenderDisplayName": {
+                              "type": "string"
+                            },
+                            "p1SenderDomain": {
+                              "type": "string"
+                            },
+                            "p2Sender": {
+                              "type": "string"
+                            },
+                            "p2SenderDisplayName": {
+                              "type": "string"
+                            },
+                            "p2SenderDomain": {
+                              "type": "string"
+                            },
+                            "recipient": {
+                              "type": "string"
+                            },
+                            "sid": {
+                              "type": "string"
+                            },
+                            "subject": {
+                              "type": "string"
+                            },
+                            "upn": {
+                              "type": "string"
+                            },
+                            "upnSuffix": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "varSender": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Foreach"
+            },
+            "varRecipient": {
+              "runAfter": {
+                "Get_incident": [
+                  "Succeeded"
+                ]
+              },
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "recipient",
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            "varSender": {
+              "runAfter": {
+                "varRecipient": [
+                  "Succeeded"
+                ]
+              },
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "sender",
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          },
+          "outputs": {}
+        },
+        "parameters": {
+          "$connections": {
+            "value": {
+              "azuresentinel": {
+                "connectionId": "[variables('sentinelString')]",
+                "connectionName": "[parameters('sentinelConnectionName')]",
+                "connectionProperties": {
+                  "authentication": {
+                    "type": "ManagedServiceIdentity"
+                  }
+                },
+                "id": "[variables('sentinelId')]"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
