@@ -79,9 +79,9 @@ Die Aktion können wir selbst definieren und abfragen. Auf den zurückgegebenen 
 
 :orange_circle: Das eigentliche JSON
 
-:green_circle: Vorschaue der gerenderten Card
+:green_circle: Vorschau der gerenderten Card
 
-:bangbang: Auf die Verion und den Client achten
+:bangbang: Auf die Version und den Client achten
 
 ![Card Designer](imgs/CardDesigner.png)
 
