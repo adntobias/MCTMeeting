@@ -87,11 +87,11 @@ Die "Disable User" Card-Action Endpoint verweist auf eine Logic App mit HTTP-Tri
 
 :red_circle: Verfügbare Elemente
 
+:green_circle: Vorschau der gerenderten Card
+
 :large_blue_circle: Genutze Elemente in Baumstruktur und deren Properties
 
 :orange_circle: Das eigentliche JSON
-
-:green_circle: Vorschau der gerenderten Card
 
 :bangbang: Auf die Version und den Client achten
 
