@@ -71,6 +71,20 @@ Die Aktion können wir selbst definieren und abfragen. Auf den zurückgegebenen 
 
 ![Action Response PwrShll](imgs/pwrshllResponse.png)
 
+## Card Designer
+
+:red_circle: Verfügbare Elemente
+
+:large_blue_circle: Genutze Elemente in Baumstruktur und deren Properties
+
+:orange_circle: Das eigentliche JSON
+
+:green_circle: Vorschaue der gerenderten Card
+
+:bangbang: Auf die Verion und den Client achten
+
+![Card Designer](imgs/CardDesigner.png)
+
 #### TODO 
 - Deployment errors, due to identity
 - ARM Skript parameters
