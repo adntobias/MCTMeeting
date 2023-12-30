@@ -21,7 +21,7 @@
   },
   "variables": {
     "sentinelString": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/', parameters('sentinelConnectionName'))]",
-    "sentinelId": "[concat('/subscriptions/', parameters('subscription'), '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', parameters('sentinelConnectionName'))]"
+    "sentinelId": "[concat('/subscriptions/', parameters('subscription'), '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]"
   },
   "resources": [
     {
