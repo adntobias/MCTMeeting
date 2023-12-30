@@ -5,7 +5,7 @@
 
 - **Womit langweile ich euch heute?**
   - Mit Logic Apps und Sentinel. Das Ganze dient nur als Vorwand, um euch etwas über Teams und Adaptive Cards zu zeigen.
-  - <span style="font-size: 75%"> Evtl ein paar Markdown Tricks </span>
+  - <sup> Evtl ein paar Markdown Tricks </sup>
 
 - **Was ist das und warum sollte man das kennen?**
   - Teams, unser ultimativer Hub für alles Mögliche, bietet eine super Möglichkeit, faule User mit mehr Shortcuts zur Arbeit zu bewegen.
