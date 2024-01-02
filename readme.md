@@ -15,7 +15,8 @@
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fStyx665%2fMCTMeeting%2fmain%2fLogic%2520Apps%2fSentinelPostCard.json)
 
-Das Ziel ist es, den Incident in Teams darzustellen und direkt eine Aktion auszuführen.
+<details>
+<summary> Das Ziel ist es, den Incident in Teams darzustellen und direkt eine Aktion auszuführen. </summary> 
 
 ![Rendered Card](imgs/Card.png)
 
@@ -64,6 +65,7 @@ Die Aktion können wir selbst definieren und abfragen. Auf den zurückgegebenen 
   "type": "ActionSet"
 }
 ```
+</details>
 
 ## [Post Powershell Card](Powershell/readme.md)
 
