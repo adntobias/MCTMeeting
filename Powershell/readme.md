@@ -16,7 +16,7 @@ $card = Get-Content '.\card.json'
 Invoke-RestMethod -Method post -ContentType 'Application/Json' -Body $card -Uri $webhook
 ```
 
-Der WEbhook, der die Response entgegennimmt ist an der stelle `url` fest hinterlegt, die Werte, die wir selbst mitgeben werden durch das Skript dynamisch ersetzt (`XY_ACTION`)
+Der WEbhook, der die Response entgegennimmt ist an der stelle `url` fest hinterlegt, die Werte, die wir selbst mitgeben werden durch das Skript dynamisch ersetzt (`XY_ACTION`) und müssen extra Encoded[^1] werden
 
 ```json
 ...,
@@ -39,7 +39,7 @@ Der WEbhook, der die Response entgegennimmt ist an der stelle `url` fest hinterl
 ```
 
 ![Action Response PwrShll](../imgs/pwrshllResponse.png)
-- script verlinken
-- card anpassung
-- actions müssen anders entgegengenommen werden
-- 
+
+
+[^1]: [URL Encodings](https://www.w3schools.com/tags/ref_urlencode.ASP)
+
