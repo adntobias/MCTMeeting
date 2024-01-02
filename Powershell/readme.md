@@ -40,6 +40,8 @@ Der WEbhook, der die Response entgegennimmt ist an der stelle `url` fest hinterl
 
 ![Action Response PwrShll](../imgs/pwrshllResponse.png)
 
+- [x] Response entgegennehmen :tada:
+- [ ] Was sinnvolles damit machen
 
 [^1]: [URL Encodings](https://www.w3schools.com/tags/ref_urlencode.ASP)
 
