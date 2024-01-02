@@ -4,7 +4,7 @@
   "parameters": {
     "flowName": {
       "defaultValue": "postCardToTeamsOnIncident",
-      "type": "String"
+      "type": "string"
     },
     "region": {
       "defaultValue": "[resourceGroup().location]",

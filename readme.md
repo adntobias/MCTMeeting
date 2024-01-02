@@ -5,7 +5,7 @@
 
 - **Womit langweile ich euch heute?**
   - Mit Logic Apps und Sentinel. Das Ganze dient nur als Vorwand, um euch etwas über Teams und Adaptive Cards zu zeigen.
-  - <sup> Evtl ein paar Markdown Tricks </sup>
+  - <sup> Evtl ein paar [Markdown](https://docs.github.com/en/enterprise-cloud@latest/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/quickstart-for-writing-on-github) Tricks </sup>
 
 - **Was ist das und warum sollte man das kennen?**
   - Teams, unser ultimativer Hub für alles Mögliche, bietet eine super Möglichkeit, faule User mit mehr Shortcuts zur Arbeit zu bewegen.
@@ -71,18 +71,18 @@ Die Aktion können wir selbst definieren und abfragen. Auf den zurückgegebenen 
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FStyx665%2FMCTMeeting%2Fmain%2FLogic%2520Apps%2FCardResponse.json)
 
+<details>
+<summary>Senden einer Card per Powershell Script</summary>
+
 Im Verzeichnis `powershell` befindet sich ein Skript für den Versand einer Adaptive Card in einen Teams-Channel. Hierfür ist die Einrichtung eines [Incoming Webhooks](https://shorturl.at/nxYZ8) erforderlich.
 
 Das Skript liest eine vorgefertigte Card und ersetzt dynamisch vordefinierte Werte. Die fertige Card wird daraufhin in einen Teams-Channel gepostet.
 
 Die "Disable User" Card-Action Endpoint verweist auf eine Logic App mit HTTP-Trigger.
 
-- script verlinken
-- card anpassung
-- actions müssen anders entgegengenommen werden
-- 
-
 ![Action Response PwrShll](imgs/pwrshllResponse.png)
+
+</details>
 
 ## [Card Designer](https://adaptivecards.io/designer/)
 
