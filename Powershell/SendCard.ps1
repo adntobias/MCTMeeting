@@ -13,7 +13,7 @@ $actionURL = "XY_INCI/XY_TITL/XY_TIME/XY_RECI/XY_SEND/XY_SEVE"
 # Define a hashtable of replacements to be made in the JSON content
 $replacments = @{
     "XY_INCI"= [System.Web.HttpUtility]::UrlEncode("/subscriptions/8140799d-d299-4b7a-a726-57dd828bb63d/resourceGroups/sentinel/providers/Microsoft.OperationalInsights/workspaces/sentinelworkspace/providers/Microsoft.SecurityInsights/Incidents/a434bd5a-1694-4933-a485-e84c0237c7eb") #looks like /subscriptions/8140799d-d299-4b7a-a726-57dd828bb63d/resourceGroups/sentinel/providers/Microsoft.OperationalInsights/workspaces/sentinelworkspace/providers/Microsoft.SecurityInsights/Incidents/a434bd5a-1694-4933-a485-e84c0237c7eb
-    "XY_LINK"= "https://google.de"
+    "XY_LINK"= "https://portal.azure.com"
     "XY_TITL"= "Cooler Incident"
     "XY_RECI"= "RECIPIENT"
     "XY_SEND"= "SENDER"

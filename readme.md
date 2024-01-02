@@ -11,9 +11,7 @@
   - Teams, unser ultimativer Hub für alles Mögliche, bietet eine super Möglichkeit, faule User mit mehr Shortcuts zur Arbeit zu bewegen.
 
 
-
-
-## Post-Incident Card 
+## [Post-Incident Card](Logic%20Apps/readme.md) 
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fStyx665%2fMCTMeeting%2fmain%2fLogic%2520Apps%2fSentinelPostCard.json)
 
@@ -43,7 +41,7 @@ Vor dem Posten der Card in den Channel entscheiden wir, abhängig von der ```Sev
 
 ![Check Severity](imgs/checkSeverity.png)
 
-Für alle ernsten Vorfälle (```High```) posten wir die Card, um schnell die wichtigsten Schritte einzuleiten. Alle anderen Incidents werden als einfache Nachricht gepostet.
+Für alle ernsten Incidents (```High```) posten wir die Card, um schnell die wichtigsten Schritte einzuleiten. Alle anderen Incidents werden als einfache Nachricht gepostet.
 
 Wenn eine Aktion ausgeführt werden soll, warten wir auf die ```Response```.
 
@@ -67,7 +65,7 @@ Die Aktion können wir selbst definieren und abfragen. Auf den zurückgegebenen 
 }
 ```
 
-## Post Powershell Card
+## [Post Powershell Card](Powershell/readme.md)
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FStyx665%2FMCTMeeting%2Fmain%2FLogic%2520Apps%2FCardResponse.json)
 
@@ -99,5 +97,4 @@ Die "Disable User" Card-Action Endpoint verweist auf eine Logic App mit HTTP-Tri
 ![Card Designer](imgs/CardDesigner.png)
 
 #### TODO 
-- Deployment errors, due to identity
-- ARM Skript parameters
+- Deployment - Subscription Parameter can maybe be omitted
