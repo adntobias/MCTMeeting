@@ -1,5 +1,23 @@
 # MCT Meeting
 
+## :warning::warning: Update :warning::warning:
+Weil die Frage aufkam und nicht endgültig beantwortet wurde:
+Ja, VS Code hat auch eine Auto-Save funktion
+<details> 
+<summary>Ja, VS Code hat auch eine Auto-Save funktion (:point_left: click me)
+</summary>
+Geht in die Einstellungen:
+![Settings](imgs/openSettings.png)
+
+und sucht in der globalen Suche nach "`Auto Save`".
+Ihr bekommt verschiede Vorschläge nach welcher Methodik er speichern soll.
+
+![AutoSave](imgs/autoSave.png)
+</details> 
+
+---
+<br>
+<br>
 - **Warum langweile ich euch heute ?**
   - Lars wollte irgendwas mit Azure Sentinel. :roll_eyes:
 
