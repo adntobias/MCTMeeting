@@ -2,14 +2,14 @@
 
 ## :warning::warning: Update :warning::warning:
 Weil die Frage aufkam und nicht endgültig beantwortet wurde:
-Ja, VS Code hat auch eine Auto-Save funktion
 <details> 
-<summary>Ja, VS Code hat auch eine Auto-Save funktion (:point_left: click me)
-</summary>
+<summary>Ja, VS Code hat auch eine Auto-Save funktion ( :point_left: click me)
+</summary><br>
 Geht in die Einstellungen:
+
 ![Settings](imgs/openSettings.png)
 
-und sucht in der globalen Suche nach "`Auto Save`".
+und sucht in der globalen Suche nach "`Auto Save`".<br>
 Ihr bekommt verschiede Vorschläge nach welcher Methodik er speichern soll.
 
 ![AutoSave](imgs/autoSave.png)
