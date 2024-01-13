@@ -93,9 +93,7 @@
           "actions": {
             "Card": {
               "runAfter": {
-                "loopEntities": [
-                  "Succeeded"
-                ]
+                "loopEntities": ["Succeeded"]
               },
               "type": "Compose",
               "inputs": {
@@ -238,17 +236,13 @@
                 }
               },
               "runAfter": {
-                "Card": [
-                  "Succeeded"
-                ]
+                "Card": ["Succeeded"]
               },
               "else": {
                 "actions": {
                   "Post_card_in_a_chat_or_channel": {
                     "runAfter": {
-                      "postAndWait": [
-                        "Failed"
-                      ]
+                      "postAndWait": ["Failed"]
                     },
                     "type": "ApiConnection",
                     "inputs": {
@@ -294,9 +288,7 @@
                       }
                     },
                     "runAfter": {
-                      "postAndWait": [
-                        "Succeeded"
-                      ]
+                      "postAndWait": ["Succeeded"]
                     },
                     "expression": {
                       "and": [
@@ -410,9 +402,7 @@
                     },
                     "setRecipient": {
                       "runAfter": {
-                        "EntMailProps": [
-                          "Succeeded"
-                        ]
+                        "EntMailProps": ["Succeeded"]
                       },
                       "type": "SetVariable",
                       "inputs": {
@@ -422,9 +412,7 @@
                     },
                     "setSender": {
                       "runAfter": {
-                        "setRecipient": [
-                          "Succeeded"
-                        ]
+                        "setRecipient": ["Succeeded"]
                       },
                       "type": "SetVariable",
                       "inputs": {
@@ -434,17 +422,12 @@
                     }
                   },
                   "runAfter": {
-                    "parseEntity": [
-                      "Succeeded"
-                    ]
+                    "parseEntity": ["Succeeded"]
                   },
                   "expression": {
                     "and": [
                       {
-                        "equals": [
-                          "",
-                          "MailMessage"
-                        ]
+                        "equals": ["", "MailMessage"]
                       }
                     ]
                   },
@@ -555,17 +538,13 @@
                 }
               },
               "runAfter": {
-                "varSender": [
-                  "Succeeded"
-                ]
+                "varSender": ["Succeeded"]
               },
               "type": "Foreach"
             },
             "varRecipient": {
               "runAfter": {
-                "Get_incident": [
-                  "Succeeded"
-                ]
+                "Get_incident": ["Succeeded"]
               },
               "type": "InitializeVariable",
               "inputs": {
@@ -579,9 +558,7 @@
             },
             "varSender": {
               "runAfter": {
-                "varRecipient": [
-                  "Succeeded"
-                ]
+                "varRecipient": ["Succeeded"]
               },
               "type": "InitializeVariable",
               "inputs": {
