@@ -4,7 +4,7 @@
   "parameters": {
     "flowName": {
       "defaultValue": "postCardToTeamsOnIncident",
-      "type": "String"
+      "type": "string"
     },
     "region": {
       "defaultValue": "[resourceGroup().location]",
@@ -17,11 +17,20 @@
     "sentinelConnectionName": {
       "defaultValue": "azuresentinel",
       "type": "string"
+    },
+    "teamsConnectionName": {
+      "defaultValue": "teams",
+      "type": "string"
     }
   },
   "variables": {
     "sentinelString": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/', parameters('sentinelConnectionName'))]",
-    "sentinelId": "[concat('/subscriptions/', parameters('subscription'), '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]"
+    "sentinelId": "[concat('/subscriptions/', parameters('subscription'), '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
+    "sentinelConnIdTest": "[resourceId('Microsoft.Web/connections', parameters('sentinelConnectionName'))]",
+    "sentinelIdTest": "[subscriptionResourceId('Microsoft.Web/locations/managedApis', resourceGroup().location, 'azuresentinel')]",
+    "teamsId": "[concat('/subscriptions/', parameters('subscription'), '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', parameters('teamsConnectionName'))]",
+    "teamsIdTest": "[subscriptionResourceId('Microsoft.Web/locations/managedApis', resourceGroup().location, 'teams')]",
+    "teamsConnIdTest": "[resourceId('Microsoft.Web/connections', parameters('teamsConnectionName'))]"
   },
   "resources": [
     {
@@ -32,24 +41,30 @@
       "kind": "V1",
       "properties": {
         "displayName": "incidentTrigger",
-        "statuses": [
-          {
-            "status": "Ready"
-          }
-        ],
-        "customParameterValues": {},
-        "createdTime": "2023-12-21T10:47:04.5659388Z",
-        "changedTime": "2023-12-21T10:47:04.5659388Z",
         "api": {
           "name": "[parameters('sentinelConnectionName')]",
           "displayName": "Microsoft Sentinel",
           "description": "Cloud-native SIEM with a built-in AI so you can focus on what matters most",
-          "iconUri": "[concat('https://connectoricons-prod.azureedge.net/releases/v1.0.1672/1.0.1672.3545/', parameters('sentinelConnectionName'), '/icon.png')]",
-          "brandColor": "#0072C6",
           "id": "[variables('sentinelId')]",
           "type": "Microsoft.Web/locations/managedApis"
-        },
-        "testLinks": []
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Web/connections",
+      "apiVersion": "2016-06-01",
+      "name": "[parameters('teamsConnectionName')]",
+      "location": "[parameters('region')]",
+      "kind": "V1",
+      "properties": {
+        "displayName": "MS Teams Connection",
+        "api": {
+          "name": "[parameters('teamsConnectionName')]",
+          "displayName": "Microsoft Teams",
+          "description": "Microsoft Teams enables you to get all your content, tools and conversations in the Team workspace with Office 365.",
+          "id": "[variables('teamsId')]",
+          "type": "Microsoft.Web/locations/managedApis"
+        }
       }
     },
     {
@@ -58,7 +73,8 @@
       "name": "[parameters('flowName')]",
       "location": "[parameters('region')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/connections', parameters('sentinelConnectionName'))]"
+        "[resourceId('Microsoft.Web/connections', parameters('sentinelConnectionName'))]",
+        "[resourceId('Microsoft.Web/connections', parameters('teamsConnectionName'))]"
       ],
       "identity": {
         "type": "SystemAssigned"
@@ -577,14 +593,14 @@
           "$connections": {
             "value": {
               "azuresentinel": {
-                "connectionId": "[variables('sentinelString')]",
+                "connectionId": "[variables('sentinelConnIdTest')]",
                 "connectionName": "[parameters('sentinelConnectionName')]",
-                "connectionProperties": {
-                  "authentication": {
-                    "type": "ManagedServiceIdentity"
-                  }
-                },
                 "id": "[variables('sentinelId')]"
+              },
+              "teams": {
+                "connectionId": "[variables('teamsConnIdTest')]",
+                "connectionName": "[parameters('teamsConnectionName')]",
+                "id": "[variables('teamsId')]"
               }
             }
           }
