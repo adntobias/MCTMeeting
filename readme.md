@@ -8,7 +8,6 @@ Weil die Frage aufkam und nicht endgültig beantwortet wurde:
 Geht in die Einstellungen:
 
 ![Settings](imgs/openSettings.png)
-sd
 und sucht in der globalen Suche nach "`Auto Save`".<br>
 Ihr bekommt verschiede Vorschläge nach welcher Methodik er speichern soll.
 
