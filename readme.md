@@ -13,4 +13,4 @@ Possible Topics:
 # Last Meetings
 |Date|Branch|
 |--|--|
-|Januar '24|[Jan24](https://github.com/Styx665/MCTMeeting/tree/Jan-24)
+|Januar '24|[Jan24](https://github.com/adntobias/MCTMeeting/tree/Jan-24)
